@@ -24,7 +24,7 @@ var STATE_INFO_BLOCK_START = 16;
 const ZSTD_MAGIC = 0xFD2FB528;
 
 /** @constructor */
-function StateLoadError(msg)
+export function StateLoadError(msg)
 {
     this.message = msg;
 }

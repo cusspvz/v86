@@ -92,7 +92,7 @@ var FM_HANDLERS = [];
  * @param {CPU} cpu
  * @param {BusConnector} bus
  */
-function SB16(cpu, bus)
+export function SB16(cpu, bus)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;

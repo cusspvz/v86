@@ -1,4 +1,4 @@
-"use strict";
+import {CPU } from './cpu'
 
 CPU.prototype.debug_init = function()
 {

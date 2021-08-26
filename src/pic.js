@@ -11,7 +11,7 @@ var PIC_LOG_VERBOSE = false;
  * @param {CPU} cpu
  * @param {PIC=} master
  */
-function PIC(cpu, master)
+export function PIC(cpu, master)
 {
     /**
      * all irqs off

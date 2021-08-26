@@ -16,7 +16,7 @@ var HPET_ADDR = 0xFED00000,
  * @constructor
  * @param {CPU} cpu
  */
-function HPET(cpu)
+export function HPET(cpu)
 {
     var me = this,
 

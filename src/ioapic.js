@@ -50,7 +50,7 @@ var IOAPIC_DELIVERY_INIT = 5;
  * @constructor
  * @param {CPU} cpu
  */
-function IOAPIC(cpu)
+export function IOAPIC(cpu)
 {
     /** @type {CPU} */
     this.cpu = cpu;

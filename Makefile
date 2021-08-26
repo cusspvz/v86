@@ -307,27 +307,12 @@ api-tests: all-debug
 	./tests/api/state.js
 	./tests/api/reset.js
 
-all-tests: jshint kvm-unit-test qemutests qemutests-release jitpagingtests api-tests nasmtests nasmtests-force-jit tests expect-tests
+all-tests: linting kvm-unit-test qemutests qemutests-release jitpagingtests api-tests nasmtests nasmtests-force-jit tests expect-tests
 	# Skipping:
 	# - devices-test (hangs)
 
-jshint:
-	jshint --config=./.jshint.json src tests gen lib
+linting:
+	./node_modules/.bin/eslint ./src
 
 rustfmt: $(RUST_FILES)
 	cargo fmt --all -- --check
-
-build/capstone-x86.min.js:
-	mkdir -p build
-	wget -nv -P build https://github.com/AlexAltea/capstone.js/releases/download/v3.0.5-rc1/capstone-x86.min.js
-
-build/libwabt.js:
-	mkdir -p build
-	wget -nv -P build https://github.com/WebAssembly/wabt/archive/1.0.6.zip
-	unzip -j -d build/ build/1.0.6.zip wabt-1.0.6/demo/libwabt.js
-	rm build/1.0.6.zip
-
-build/xterm.js:
-	curl https://cdn.jsdelivr.net/npm/xterm@4.9.0/lib/xterm.js > build/xterm.js
-	curl https://cdn.jsdelivr.net/npm/xterm@4.9.0/lib/xterm.js.map > build/xterm.js.map
-	curl https://cdn.jsdelivr.net/npm/xterm@4.9.0/css/xterm.css > build/xterm.css

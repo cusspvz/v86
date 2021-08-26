@@ -7,58 +7,58 @@
  * @define {boolean}
  * Overridden for production by closure compiler
  */
-var DEBUG = true;
+export const DEBUG = true;
 
 /** @const */
-var LOG_TO_FILE = false;
+export const LOG_TO_FILE = false;
 
 /**
  * @const
  * Enables logging all IO port reads and writes. Very verbose
  */
-var LOG_ALL_IO = false;
+export const LOG_ALL_IO = false;
 
 /**
  * @const
  */
-var DUMP_GENERATED_WASM = false;
+export const DUMP_GENERATED_WASM = false;
 
 /**
  * @const
  */
-var DUMP_UNCOMPILED_ASSEMBLY = false;
+export const DUMP_UNCOMPILED_ASSEMBLY = false;
 
 /**
  * @const
  * More accurate filenames in 9p debug messages at the cost of performance.
  */
-var TRACK_FILENAMES = false;
+export const TRACK_FILENAMES = false;
 
-var LOG_LEVEL = LOG_ALL & ~LOG_PS2 & ~LOG_PIT & ~LOG_VIRTIO & ~LOG_9P & ~LOG_PIC &
+export const LOG_LEVEL = LOG_ALL & ~LOG_PS2 & ~LOG_PIT & ~LOG_VIRTIO & ~LOG_9P & ~LOG_PIC &
                           ~LOG_DMA & ~LOG_SERIAL & ~LOG_NET & ~LOG_FLOPPY & ~LOG_DISK & ~LOG_VGA & ~LOG_SB16;
 
 /**
  * @const
  * Draws entire buffer and visualizes the layers that would be drawn
  */
-var DEBUG_SCREEN_LAYERS = DEBUG && false;
+export const DEBUG_SCREEN_LAYERS = DEBUG && false;
 
 
 /** @const */
-var ENABLE_HPET = DEBUG && false;
+export const ENABLE_HPET = DEBUG && false;
 
 /**
  * @const
  * How often, in milliseconds, to yield to the browser for rendering and
  * running events
  */
-var TIME_PER_FRAME = 1;
+export const TIME_PER_FRAME = 1;
 
 /**
  * @const
  * How many ticks the TSC does per millisecond
  */
-var TSC_RATE = 1 * 1000 * 1000;
+export const TSC_RATE = 1 * 1000 * 1000;
 
 /** @const */
-var APIC_TIMER_FREQ = TSC_RATE;
+export const APIC_TIMER_FREQ = TSC_RATE;

@@ -11,7 +11,7 @@ var OSCILLATOR_FREQ = 1193.1816666; // 1.193182 MHz
  *
  * Programmable Interval Timer
  */
-function PIT(cpu, bus)
+export function PIT(cpu, bus)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;

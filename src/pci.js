@@ -10,7 +10,7 @@ var
  * @constructor
  * @param {CPU} cpu
  */
-function PCI(cpu)
+export function PCI(cpu)
 {
     this.pci_addr = new Uint8Array(4);
     this.pci_value = new Uint8Array(4);

@@ -7,7 +7,7 @@
  * @constructor
  * @param {CPU} cpu
  */
-function IO(cpu)
+export function IO(cpu)
 {
     /** @const */
     this.ports = [];

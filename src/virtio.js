@@ -153,7 +153,7 @@ var VirtIO_Options;
  * @param {CPU} cpu
  * @param {VirtIO_Options} options
  */
-function VirtIO(cpu, options)
+export function VirtIO(cpu, options)
 {
     const io = cpu.io;
 

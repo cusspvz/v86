@@ -1,7 +1,7 @@
 "use strict";
 
 /** @const */
-var CPU_LOG_VERBOSE = false;
+export const CPU_LOG_VERBOSE = false;
 
 
 // Resources:
@@ -11,7 +11,7 @@ var CPU_LOG_VERBOSE = false;
 
 
 /** @constructor */
-function CPU(bus, wm)
+export function CPU(bus, wm)
 {
     this.wm = wm;
     this.wasm_patch();

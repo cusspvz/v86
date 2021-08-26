@@ -5,7 +5,7 @@
  *
  * @param {CPU} cpu
  */
-function FloppyController(cpu, fda_image, fdb_image)
+export function FloppyController(cpu, fda_image, fdb_image)
 {
     /** @const @type {IO|undefined} */
     this.io = cpu.io;

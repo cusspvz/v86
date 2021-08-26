@@ -61,7 +61,7 @@ const NE2K_LOG_VERBOSE = false;
  * @param {BusConnector} bus
  * @param {Boolean} preserve_mac_from_state_image
  */
-function Ne2k(cpu, bus, preserve_mac_from_state_image)
+export function Ne2k(cpu, bus, preserve_mac_from_state_image)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;

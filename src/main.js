@@ -4,7 +4,7 @@
  * @constructor
  * @param {Object=} wasm
  */
-function v86(bus, wasm)
+export function v86(bus, wasm)
 {
     /** @type {boolean} */
     this.running = false;

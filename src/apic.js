@@ -4,26 +4,26 @@
 
 
 /** @const */
-var APIC_LOG_VERBOSE = false;
+export const APIC_LOG_VERBOSE = false;
 
 /** @const */
-var APIC_ADDRESS = 0xFEE00000;
+export const APIC_ADDRESS = 0xFEE00000;
 
 /** @const */
-var APIC_TIMER_MODE_MASK = 3 << 17;
+export const APIC_TIMER_MODE_MASK = 3 << 17;
 
 /** @const */
-var APIC_TIMER_MODE_ONE_SHOT = 0;
+export const APIC_TIMER_MODE_ONE_SHOT = 0;
 
 /** @const */
-var APIC_TIMER_MODE_PERIODIC = 1 << 17;
+export const APIC_TIMER_MODE_PERIODIC = 1 << 17;
 
 /** @const */
-var APIC_TIMER_MODE_TSC = 2 << 17;
+export const APIC_TIMER_MODE_TSC = 2 << 17;
 
 
 /** @const */
-var DELIVERY_MODES = [
+export const DELIVERY_MODES = [
     "Fixed (0)",
     "Lowest Prio (1)",
     "SMI (2)",
@@ -35,14 +35,14 @@ var DELIVERY_MODES = [
 ];
 
 /** @const */
-var DESTINATION_MODES = ["physical", "logical"];
+export const DESTINATION_MODES = ["physical", "logical"];
 
 
 /**
  * @constructor
  * @param {CPU} cpu
  */
-function APIC(cpu)
+export function APIC(cpu)
 {
     /** @type {CPU} */
     this.cpu = cpu;

@@ -1,36 +1,5 @@
 "use strict";
 
-/** @param {number=} length */
-function hex_dump(buffer, length)
-{
-    var result = [];
-    length = length || buffer.byteLength;
-    var addr = 0;
-    var line, byt;
-
-    for(var i = 0; i < length >> 4; i++)
-    {
-        line = h(addr + (i << 4), 5) + "   ";
-
-        for(var j = 0; j < 0x10; j++)
-        {
-            byt = buffer[addr + (i << 4) + j];
-            line += h(byt, 2) + " ";
-        }
-
-        line += "  ";
-
-        for(j = 0; j < 0x10; j++)
-        {
-            byt = buffer[addr + (i << 4) + j];
-            line += (byt < 33 || byt > 126) ? "." : String.fromCharCode(byt);
-        }
-
-        result.push(line);
-    }
-
-    return "\n" + result.join("\n");
-}
 
 /** @const */
 var CDROM_SECTOR_SIZE = 2048;
@@ -44,7 +13,7 @@ var HD_SECTOR_SIZE = 512;
  * @param {number} nr
  * @param {BusConnector} bus
  * */
-function IDEDevice(cpu, master_buffer, slave_buffer, is_cd, nr, bus)
+export function IDEDevice(cpu, master_buffer, slave_buffer, is_cd, nr, bus)
 {
     this.master = new IDEInterface(this, cpu, master_buffer, is_cd, nr, 0, bus);
     this.slave = new IDEInterface(this, cpu, slave_buffer, false, nr, 1, bus);

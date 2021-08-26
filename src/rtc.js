@@ -46,7 +46,7 @@
  * @constructor
  * @param {CPU} cpu
  */
-function RTC(cpu)
+export function RTC(cpu)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;

@@ -3,13 +3,13 @@
 // http://www.uefi.org/sites/default/files/resources/ACPI_6_1.pdf
 
 /** @const */
-var PMTIMER_FREQ_SECONDS = 3579545;
+export const PMTIMER_FREQ_SECONDS = 3579545;
 
 /**
  * @constructor
  * @param {CPU} cpu
  */
-function ACPI(cpu)
+export function ACPI(cpu)
 {
     /** @type {CPU} */
     this.cpu = cpu;

@@ -4,35 +4,33 @@ var goog = goog || {};
 goog.exportSymbol = function() {};
 goog.exportProperty = function() {};
 
-var v86util = v86util || {};
-
 // pad string with spaces on the right
-v86util.pads = function(str, len)
+export const pads = function(str, len)
 {
     str = (str || str === 0) ? str + "" : "";
     return str.padEnd(len, " ");
 };
 
 // pad string with zeros on the left
-v86util.pad0 = function(str, len)
+export const pad0 = function(str, len)
 {
     str = (str || str === 0) ? str + "" : "";
     return str.padStart(len, "0");
 };
 
 // generates array given size with zeros
-v86util.zeros = function(size)
+export const zeros = function(size)
 {
     return Array(size).fill(0);
 };
 
 // generates [0, 1, 2, ..., size-1]
-v86util.range = function(size)
+export const range = function(size)
 {
     return Array.from(Array(size).keys());
 };
 
-v86util.view = function(constructor, memory, offset, length)
+export const view = function(constructor, memory, offset, length)
 {
     return new Proxy({},
         {
@@ -63,7 +61,7 @@ v86util.view = function(constructor, memory, offset, length)
  * @param {number=} len
  * @return {string}
  */
-function h(n, len)
+export function h(n, len)
 {
     if(!n)
     {
@@ -74,7 +72,7 @@ function h(n, len)
         var str = n.toString(16);
     }
 
-    return "0x" + v86util.pad0(str.toUpperCase(), len || 1);
+    return "0x" + pad0(str.toUpperCase(), len || 1);
 }
 
 
@@ -82,7 +80,7 @@ if(typeof crypto !== "undefined" && crypto.getRandomValues)
 {
     let rand_data = new Int32Array(1);
 
-    v86util.get_rand_int = function()
+    get_rand_int = function()
     {
         crypto.getRandomValues(rand_data);
         return rand_data[0];
@@ -93,7 +91,7 @@ else if(typeof require !== "undefined")
     /** @type {{ randomBytes: Function }} */
     const crypto = require("crypto");
 
-    v86util.get_rand_int = function()
+    get_rand_int = function()
     {
         return crypto.randomBytes(4)["readInt32LE"](0);
     };
@@ -108,7 +106,7 @@ else
  * Synchronous access to ArrayBuffer
  * @constructor
  */
-function SyncBuffer(buffer)
+export function SyncBuffer(buffer)
 {
     dbg_assert(buffer instanceof ArrayBuffer);
 
@@ -169,41 +167,24 @@ SyncBuffer.prototype.set_state = function(state)
     this.buffer = state[1].slice().buffer;
 };
 
-(function()
-{
-    if(typeof Math.clz32 === "function" && Math.clz32(0) === 32 &&
-       Math.clz32(0x12345) === 15 && Math.clz32(-1) === 0)
-    {
-        /**
-         * calculate the integer logarithm base 2 of a byte
-         * @param {number} x
-         * @return {number}
-         */
-        v86util.int_log2_byte = function(x)
-        {
-            dbg_assert(x > 0);
-            dbg_assert(x < 0x100);
-
-            return 31 - Math.clz32(x);
-        };
-
-        /**
-         * calculate the integer logarithm base 2
-         * @param {number} x
-         * @return {number}
-         */
-        v86util.int_log2 = function(x)
-        {
-            dbg_assert(x > 0);
-
-            return 31 - Math.clz32(x);
-        };
-
-        return;
+const clz32 = Math.clz32 || function (x)  {
+    // Let n be ToUint32(x).
+    // Let p be the number of leading zero bits in
+    // the 32-bit binary representation of n.
+    // Return p.
+    asUint = x >>> 0;
+    if (asUint === 0) {
+      return 32;
     }
+    return 31 - (Math.log(asUint) / Math.LN2 | 0) |0; // the "| 0" acts like math.floor
+  }
 
-    var int_log2_table = new Int8Array(256);
+const useClz32 = typeof clz32 === "function" && clz32(0) === 32 &&
+       clz32(0x12345) === 15 && clz32(-1) === 0
 
+const int_log2_table = new Int8Array(256);
+
+if (!useClz32) {
     for(var i = 0, b = -2; i < 256; i++)
     {
         if(!(i & i - 1))
@@ -212,12 +193,20 @@ SyncBuffer.prototype.set_state = function(state)
         int_log2_table[i] = b;
     }
 
-    /**
-     * calculate the integer logarithm base 2 of a byte
-     * @param {number} x
-     * @return {number}
-     */
-    v86util.int_log2_byte = function(x)
+}
+
+        /**
+         * calculate the integer logarithm base 2 of a byte
+         * @param {number} x
+         * @return {number}
+         */
+        export const int_log2_byte = useClz32 ? function(x)
+        {
+            dbg_assert(x > 0);
+            dbg_assert(x < 0x100);
+
+            return 31 - Math.clz32(x);
+        } : function(x)
     {
         dbg_assert(x > 0);
         dbg_assert(x < 0x100);
@@ -225,12 +214,17 @@ SyncBuffer.prototype.set_state = function(state)
         return int_log2_table[x];
     };
 
-    /**
-     * calculate the integer logarithm base 2
-     * @param {number} x
-     * @return {number}
-     */
-    v86util.int_log2 = function(x)
+        /**
+         * calculate the integer logarithm base 2
+         * @param {number} x
+         * @return {number}
+         */
+        export const int_log2 = useClz32 ? function(x)
+        {
+            dbg_assert(x > 0);
+
+            return 31 - Math.clz32(x);
+        }: function(x)
     {
         x >>>= 0;
         dbg_assert(x > 0);
@@ -263,8 +257,9 @@ SyncBuffer.prototype.set_state = function(state)
             }
         }
     };
-})();
 
+        return;
+    
 
 /**
  * @constructor
@@ -272,7 +267,7 @@ SyncBuffer.prototype.set_state = function(state)
  * Queue wrapper around Uint8Array
  * Used by devices such as the PS2 controller
  */
-function ByteQueue(size)
+export function ByteQueue(size)
 {
     var data = new Uint8Array(size),
         start,
@@ -343,7 +338,7 @@ function ByteQueue(size)
  * Queue wrapper around Float32Array
  * Used by devices such as the sound blaster sound card
  */
-function FloatQueue(size)
+export function FloatQueue(size)
 {
     this.size = size;
     this.data = new Float32Array(size);
@@ -438,7 +433,7 @@ FloatQueue.prototype.clear = function()
  * @param {number} size
  * @constructor
  */
-function CircularQueue(size)
+export function CircularQueue(size)
 {
     this.data = [];
     this.index = 0;
@@ -482,7 +477,7 @@ function dump_file(ab, name)
     download(blob, name);
 }
 
-function download(file_or_blob, name)
+export function download(file_or_blob, name)
 {
     var a = document.createElement("a");
     a["download"] = name;
@@ -508,7 +503,7 @@ function download(file_or_blob, name)
  * A simple 1d bitmap
  * @constructor
  */
-v86util.Bitmap = function(length_or_buffer)
+export const Bitmap = function(length_or_buffer)
 {
     if(typeof length_or_buffer === "number")
     {
@@ -524,7 +519,7 @@ v86util.Bitmap = function(length_or_buffer)
     }
 };
 
-v86util.Bitmap.prototype.set = function(index, value)
+Bitmap.prototype.set = function(index, value)
 {
     const bit_index = index & 7;
     const byte_index = index >> 3;
@@ -534,7 +529,7 @@ v86util.Bitmap.prototype.set = function(index, value)
         value ? this.view[byte_index] | bit_mask : this.view[byte_index] & ~bit_mask;
 };
 
-v86util.Bitmap.prototype.get = function(index)
+Bitmap.prototype.get = function(index)
 {
     const bit_index = index & 7;
     const byte_index = index >> 3;
@@ -542,7 +537,7 @@ v86util.Bitmap.prototype.get = function(index)
     return this.view[byte_index] >> bit_index & 1;
 };
 
-v86util.Bitmap.prototype.get_buffer = function()
+Bitmap.prototype.get_buffer = function()
 {
     return this.view.buffer;
 };

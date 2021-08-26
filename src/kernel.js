@@ -37,7 +37,7 @@ const LINUX_BOOT_HDR_LOADFLAGS_KEEP_SEGMENTS = 1 << 6;
 const LINUX_BOOT_HDR_LOADFLAGS_CAN_USE_HEAPS = 1 << 7;
 
 
-function load_kernel(mem8, bzimage, initrd, cmdline)
+export function load_kernel(mem8, bzimage, initrd, cmdline)
 {
     dbg_log("Trying to load kernel of size " + bzimage.byteLength);
 
@@ -179,7 +179,7 @@ function load_kernel(mem8, bzimage, initrd, cmdline)
     };
 }
 
-function make_linux_boot_rom(real_mode_segment, heap_end)
+export function make_linux_boot_rom(real_mode_segment, heap_end)
 {
     // This rom will be executed by seabios after its initialisation
     // It sets up segment registers, the stack and calls the kernel real mode entry point

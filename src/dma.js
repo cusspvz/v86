@@ -4,7 +4,7 @@
  * @constructor
  * @param {CPU} cpu
  */
-function DMA(cpu)
+export function DMA(cpu)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;

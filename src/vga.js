@@ -62,7 +62,7 @@ var VGA_HOST_MEMORY_SPACE_SIZE = Uint32Array.from([
  * @param {BusConnector} bus
  * @param {number} vga_memory_size
  */
-function VGAScreen(cpu, bus, vga_memory_size)
+export function VGAScreen(cpu, bus, vga_memory_size)
 {
     /** @const @type {BusConnector} */
     this.bus = bus;

@@ -1,0 +1,21 @@
+{
+    "name": "@v86/starter",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/copy/v86"
+    },
+    "license": "BSD-2-Clause",
+    "scripts": {
+        "dev": "",
+        "build": "",
+        "lint": "eslint ./src",
+        "test": "node tests/full/run.js"
+    },
+    "devDependencies": {
+        "capstonejs": "^4.2.23-b",
+        "eslint": "^7.32.0",
+        "wabt": "^1.0.6",
+        "webpack": "^5.51.1",
+        "xterm": "^4.9.0"
+    }
+}

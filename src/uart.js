@@ -33,7 +33,7 @@ var DLAB = 0x80;
  * @param {number} port
  * @param {BusConnector} bus
  */
-function UART(cpu, port, bus)
+export function UART(cpu, port, bus)
 {
     /** @const @type {BusConnector} */
     this.bus = bus;

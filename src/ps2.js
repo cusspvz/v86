@@ -8,7 +8,7 @@ let PS2_LOG_VERBOSE = false;
  * @param {CPU} cpu
  * @param {BusConnector} bus
  */
-function PS2(cpu, bus)
+export function PS2(cpu, bus)
 {
     /** @const @type {CPU} */
     this.cpu = cpu;
