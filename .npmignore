@@ -1,0 +1,12 @@
+.cargo/
+.github/
+closure-compiler/
+docs/
+examples/
+gen/
+lib/
+node_modules/
+src/
+tests/
+tools/
+.*

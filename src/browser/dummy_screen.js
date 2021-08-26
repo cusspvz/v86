@@ -1,187 +1,182 @@
-"use strict";
-
 /**
  * @constructor
  *
  * @param {BusConnector} bus
  */
-function DummyScreenAdapter(bus)
-{
-    var
-        graphic_image_data,
-        graphic_buffer,
-        graphic_buffer32,
+export function DummyScreenAdapter(bus) {
+  let graphic_image_data,
+    graphic_buffer,
+    graphic_buffer32,
+    /** @type {number} */
+    cursor_row,
+    /** @type {number} */
+    cursor_col,
+    graphical_mode_width,
+    graphical_mode_height,
+    // are we in graphical mode now?
+    is_graphical = false,
+    // Index 0: ASCII code
+    // Index 1: Background color
+    // Index 2: Foreground color
+    text_mode_data,
+    // number of columns
+    text_mode_width,
+    // number of rows
+    text_mode_height
 
-        /** @type {number} */
-        cursor_row,
+  this.bus = bus
 
-        /** @type {number} */
-        cursor_col,
+  bus.register(
+    'screen-set-mode',
+    function (data) {
+      this.set_mode(data)
+    },
+    this
+  )
 
-        graphical_mode_width,
-        graphical_mode_height,
+  bus.register(
+    'screen-fill-buffer-end',
+    function (data) {
+      let min = data[0]
+      let max = data[1]
 
-        // are we in graphical mode now?
-        is_graphical = false,
+      this.update_buffer(min, max)
+    },
+    this
+  )
 
-        // Index 0: ASCII code
-        // Index 1: Background color
-        // Index 2: Foreground color
-        text_mode_data,
+  bus.register(
+    'screen-put-char',
+    function (data) {
+      //console.log(data);
+      this.put_char(data[0], data[1], data[2], data[3], data[4])
+    },
+    this
+  )
 
-        // number of columns
-        text_mode_width,
+  bus.register(
+    'screen-text-scroll',
+    function (rows) {
+      console.log('scroll', rows)
+    },
+    this
+  )
 
-        // number of rows
-        text_mode_height;
+  bus.register(
+    'screen-update-cursor',
+    function (data) {
+      this.update_cursor(data[0], data[1])
+    },
+    this
+  )
+  bus.register(
+    'screen-update-cursor-scanline',
+    function (data) {
+      this.update_cursor_scanline(data[0], data[1])
+    },
+    this
+  )
 
-    this.bus = bus;
+  bus.register(
+    'screen-set-size-text',
+    function (data) {
+      this.set_size_text(data[0], data[1])
+    },
+    this
+  )
+  bus.register(
+    'screen-set-size-graphical',
+    function (data) {
+      this.set_size_graphical(data[0], data[1])
+    },
+    this
+  )
 
-    bus.register("screen-set-mode", function(data)
-    {
-        this.set_mode(data);
-    }, this);
+  this.put_char = function (row, col, chr, bg_color, fg_color) {
+    if (row < text_mode_height && col < text_mode_width) {
+      let p = 3 * (row * text_mode_width + col)
 
-    bus.register("screen-fill-buffer-end", function(data)
-    {
-        var min = data[0];
-        var max = data[1];
+      text_mode_data[p] = chr
+      text_mode_data[p + 1] = bg_color
+      text_mode_data[p + 2] = fg_color
+    }
+  }
 
-        this.update_buffer(min, max);
-    }, this);
+  this.destroy = function () {}
 
-    bus.register("screen-put-char", function(data)
-    {
-        //console.log(data);
-        this.put_char(data[0], data[1], data[2], data[3], data[4]);
-    }, this);
+  this.set_mode = function (graphical) {
+    is_graphical = graphical
+  }
 
-    bus.register("screen-text-scroll", function(rows)
-    {
-        console.log("scroll", rows);
-    }, this);
+  this.clear_screen = function () {}
 
-    bus.register("screen-update-cursor", function(data)
-    {
-        this.update_cursor(data[0], data[1]);
-    }, this);
-    bus.register("screen-update-cursor-scanline", function(data)
-    {
-        this.update_cursor_scanline(data[0], data[1]);
-    }, this);
+  /**
+   * @param {number} cols
+   * @param {number} rows
+   */
+  this.set_size_text = function (cols, rows) {
+    if (cols === text_mode_width && rows === text_mode_height) {
+      return
+    }
 
-    bus.register("screen-set-size-text", function(data)
-    {
-        this.set_size_text(data[0], data[1]);
-    }, this);
-    bus.register("screen-set-size-graphical", function(data)
-    {
-        this.set_size_graphical(data[0], data[1]);
-    }, this);
+    text_mode_data = new Int32Array(cols * rows * 3)
 
-    this.put_char = function(row, col, chr, bg_color, fg_color)
-    {
-        if(row < text_mode_height && col < text_mode_width)
-        {
-            var p = 3 * (row * text_mode_width + col);
+    text_mode_width = cols
+    text_mode_height = rows
+  }
 
-            text_mode_data[p] = chr;
-            text_mode_data[p + 1] = bg_color;
-            text_mode_data[p + 2] = fg_color;
-        }
-    };
+  this.set_size_graphical = function (width, height) {
+    graphic_buffer = new Uint8Array(4 * width * height)
+    graphic_buffer32 = new Int32Array(graphic_buffer.buffer)
 
-    this.destroy = function()
-    {
-    };
+    graphical_mode_width = width
+    graphical_mode_height = height
 
-    this.set_mode = function(graphical)
-    {
-        is_graphical = graphical;
-    };
+    this.bus.send(
+      'screen-tell-buffer',
+      [graphic_buffer32],
+      [graphic_buffer32.buffer]
+    )
+  }
 
-    this.clear_screen = function()
-    {
-    };
+  this.set_scale = function (s_x, s_y) {}
 
-    /**
-     * @param {number} cols
-     * @param {number} rows
-     */
-    this.set_size_text = function(cols, rows)
-    {
-        if(cols === text_mode_width && rows === text_mode_height)
-        {
-            return;
-        }
+  this.update_cursor_scanline = function (start, end) {}
 
-        text_mode_data = new Int32Array(cols * rows * 3);
+  this.update_cursor = function (row, col) {
+    if (row !== cursor_row || col !== cursor_col) {
+      cursor_row = row
+      cursor_col = col
+    }
+  }
 
-        text_mode_width = cols;
-        text_mode_height = rows;
-    };
+  this.update_buffer = function (min, max) {
+    if (max < min) {
+      return
+    }
 
-    this.set_size_graphical = function(width, height)
-    {
-        graphic_buffer = new Uint8Array(4 * width * height);
-        graphic_buffer32 = new Int32Array(graphic_buffer.buffer);
+    let min_y = (min / graphical_mode_width) | 0
+    let max_y = (max / graphical_mode_width) | 0
+  }
 
-        graphical_mode_width = width;
-        graphical_mode_height = height;
+  this.get_text_screen = function () {
+    let screen = []
 
-        this.bus.send("screen-tell-buffer", [graphic_buffer32], [graphic_buffer32.buffer]);
-    };
+    for (let i = 0; i < text_mode_height; i++) {
+      screen.push(this.get_text_row(i))
+    }
 
-    this.set_scale = function(s_x, s_y)
-    {
-    };
+    return screen
+  }
 
-    this.update_cursor_scanline = function(start, end)
-    {
-    };
+  this.get_text_row = function (i) {
+    let row = ''
+    let offset = 3 * i * text_mode_width
 
-    this.update_cursor = function(row, col)
-    {
-        if(row !== cursor_row || col !== cursor_col)
-        {
-            cursor_row = row;
-            cursor_col = col;
-        }
-    };
+    for (let j = 0; j < text_mode_width; j++) {
+      row += String.fromCharCode(text_mode_data[offset + 3 * j])
+    }
 
-    this.update_buffer = function(min, max)
-    {
-        if(max < min)
-        {
-            return;
-        }
-
-        var min_y = min / graphical_mode_width | 0;
-        var max_y = max / graphical_mode_width | 0;
-    };
-
-    this.get_text_screen = function()
-    {
-        var screen = [];
-
-        for(var i = 0; i < text_mode_height; i++)
-        {
-            screen.push(this.get_text_row(i));
-        }
-
-        return screen;
-    };
-
-    this.get_text_row = function(i)
-    {
-        var row = "";
-        var offset = 3 * i * text_mode_width;
-
-        for(var j = 0; j < text_mode_width; j++)
-        {
-            row += String.fromCharCode(text_mode_data[offset + 3 * j]);
-        }
-
-        return row;
-    };
+    return row
+  }
 }

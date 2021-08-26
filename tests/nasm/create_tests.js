@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 // number of tests per instruction
 const NO_TESTS = 1;

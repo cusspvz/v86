@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 const BENCH_COLLECT_STATS = +process.env.BENCH_COLLECT_STATS;
 

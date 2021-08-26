@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 var fs = require("fs");
 var V86Starter = require("../build/libv86.js").V86Starter;

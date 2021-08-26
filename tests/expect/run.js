@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 const TEST_RELEASE_BUILD = +process.env.TEST_RELEASE_BUILD;
 

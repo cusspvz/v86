@@ -1,41 +1,39 @@
-"use strict";
+import { dbg_assert } from '../log'
 
-var WorkerBus = {};
+export const WorkerBus = {}
 
 /** @constructor */
-WorkerBus.Connector = function(pair)
-{
-    this.listeners = {};
-    this.pair = pair;
+WorkerBus.Connector = function (pair) {
+  this.listeners = {}
+  this.pair = pair
 
-    pair.addEventListener("message", function(e)
-    {
-        var data = e.data;
-        var listeners = this.listeners[data[0]];
+  pair.addEventListener(
+    'message',
+    function (e) {
+      let data = e.data
+      let listeners = this.listeners[data[0]]
 
-        for(var i = 0; i < listeners.length; i++)
-        {
-            var listener = listeners[i];
-            listener.fn.call(listener.this_value, data[1]);
-        }
-    }.bind(this), false);
+      for (let i = 0; i < listeners.length; i++) {
+        let listener = listeners[i]
+        listener.fn.call(listener.this_value, data[1])
+      }
+    }.bind(this),
+    false
+  )
+}
 
-};
+WorkerBus.Connector.prototype.register = function (name, fn, this_value) {
+  let listeners = this.listeners[name]
 
-WorkerBus.Connector.prototype.register = function(name, fn, this_value)
-{
-    var listeners = this.listeners[name];
+  if (listeners === undefined) {
+    listeners = this.listeners[name] = []
+  }
 
-    if(listeners === undefined)
-    {
-        listeners = this.listeners[name] = [];
-    }
-
-    listeners.push({
-        fn: fn,
-        this_value: this_value,
-    });
-};
+  listeners.push({
+    fn: fn,
+    this_value: this_value,
+  })
+}
 
 /**
  * Send ("emit") a message
@@ -44,21 +42,16 @@ WorkerBus.Connector.prototype.register = function(name, fn, this_value)
  * @param {*=} value
  * @param {*=} transfer_list
  */
-WorkerBus.Connector.prototype.send = function(name, value, transfer_list)
-{
-    dbg_assert(arguments.length >= 1);
+WorkerBus.Connector.prototype.send = function (name, value, transfer_list) {
+  dbg_assert(arguments.length >= 1)
 
-    if(!this.pair)
-    {
-        return;
-    }
+  if (!this.pair) {
+    return
+  }
 
-    this.pair.postMessage([name, value], transfer_list);
-};
+  this.pair.postMessage([name, value], transfer_list)
+}
 
-
-WorkerBus.init = function(worker)
-{
-    return new WorkerBus.Connector(worker);
-};
-
+WorkerBus.init = function (worker) {
+  return new WorkerBus.Connector(worker)
+}

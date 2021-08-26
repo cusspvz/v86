@@ -1,32 +1,29 @@
-// "use strict";
+//
 
-// var performance = {};
+// let performance = {};
 
+// let global = {};
+// let require = function(module) {};
+// let process = { hrtime: function() {} };
+// let __dirname = "";
 
-
-// var global = {};
-// var require = function(module) {};
-// var process = { hrtime: function() {} };
-// var __dirname = "";
-
-// var exports = {};
-// var define = {};
-// var module = {};
+// let exports = {};
+// let define = {};
+// let module = {};
 
 // /**
 //  * @param {string} name
 //  * @param {function()} processor
 //  */
-// var registerProcessor = function(name, processor) {};
+// let registerProcessor = function(name, processor) {};
 
 // /** @const */
-// var currentTime = 0;
+// let currentTime = 0;
 
 // /** @const */
-// var sampleRate = 0;
+// let sampleRate = 0;
 
-
-// var WebAssembly = {
+// let WebAssembly = {
 //     Memory() {},
 //     Table() {},
 //     instantiate() { return { instance: null, module: null }; },
@@ -36,13 +33,13 @@
 // };
 // WebAssembly.Module.customSections = function(module, section) {};
 
-// var WabtModule = {
+// let WabtModule = {
 //     readWasm: function(buf, opt) {},
 //     generateNames: function() {},
 //     applyNames: function() {},
 //     toText: function() {},
 // };
-// var cs = {
+// let cs = {
 //     Capstone: function() {},
 //     ARCH_X86: 0,
 //     MODE_16: 0,

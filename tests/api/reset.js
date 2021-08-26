@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 // This test checks that reset works
 

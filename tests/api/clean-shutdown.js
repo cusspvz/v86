@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+
 
 // This test checks that calling emulator.stop() will remove all event
 // listeners, so that the nodejs process cleanly and automatically exits.

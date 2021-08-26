@@ -4,18 +4,36 @@
         "type": "git",
         "url": "https://github.com/copy/v86"
     },
+    "main": "index.js",
     "license": "BSD-2-Clause",
     "scripts": {
         "dev": "",
-        "build": "",
+        "build": "make all",
         "lint": "eslint ./src",
         "test": "node tests/full/run.js"
     },
-    "devDependencies": {
-        "capstonejs": "^4.2.23-b",
-        "eslint": "^7.32.0",
+    "dependencies": {
         "wabt": "^1.0.6",
-        "webpack": "^5.51.1",
+        "capstonejs": "^4.2.23-b",
         "xterm": "^4.9.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.1.0",
+        "eslint-plugin-prettier": "^3.3.1",
+        "webpack": "^5.51.1",
+        "lint-staged": "^10.2.11",
+        "husky": "^4.2.5",
+        "prettier": "^2.0.5"
+    },
+    "lint-staged": {
+        "src/**/*.{js,jsx,ts,tsx,json}": [
+            "prettier --write"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     }
 }
