@@ -21,6 +21,7 @@ import {
   MemoryFileStorage,
   ServerFileStorageWrapper,
 } from '../utils/filestorage'
+import { load_file_xhr } from '../utils/load_file'
 
 /**
  * Constructor for emulator instances.
@@ -228,7 +229,7 @@ export function V86Browser(options) {
     v86_bin_fallback = 'build/' + v86_bin_fallback
   }
 
-  load_file(v86_bin, {
+  load_file_xhr(v86_bin, {
     done: (bytes) => {
       WebAssembly.instantiate(bytes, { env: wasm_shared_funcs }).then(
         ({ instance }) => {
